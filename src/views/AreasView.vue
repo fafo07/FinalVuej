@@ -10,6 +10,26 @@
                         <button @click="irA('Agregar', 0)" class="btn btn-dark">Crear Area</button>
                     </div>
                 </div>
+                <div class="row my-2 justify-content-center">
+                    <h4>Buscador de Areas</h4>
+                    <div class="col-4 my-2">
+                        <form action="">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" v-model="textoABuscar"
+                                    placeholder="Buscar Areas" />
+                                <button class="btn btn-outline-secondary" @click.prevent="getAreas()">Buscar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row my-2 justify-content-center">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="control" v-on:input="control=$event.target.checked">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Mostrar Areas con Nro de Empleados > 3</label>
+                    </div>
+                    </div>
+                </div>
                 <div class="row py-2">
                     <div class="col">
                         <div class="row">
@@ -26,7 +46,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(area, index) of lista_areas">
+                                        <tr v-for="(area, index) of lista">
                                             <td>{{ area.id }}</td>
                                             <td>{{ area.nombre }}</td>
                                             <td>{{ area.Encargado }}</td>
@@ -53,13 +73,15 @@ export default ({
     name: "#AreasView",
     data() {
         return {
+            control:false,
+            textoABuscar: '',
             lista_areas: [],
         }
     },
     methods: {
         getAreas() {
             axios
-                .get("http://localhost:3333/area")
+                .get(process.env.VUE_APP_RUTA_API + "/area?q=" + this.textoABuscar)
 
                 .then(response => {
                     this.lista_areas = response.data
@@ -72,13 +94,13 @@ export default ({
                 this.$router.push({ name: 'addarea' });
             }
             if (opcion == 'Editar') {
-                this.$router.push({ name: 'editarea', params: { id: id_area} });
+                this.$router.push({ name: 'editarea', params: { id: id_area } });
             }
             if (opcion == 'Eliminar') {
                 if (confirm("Esta seguro de eliminar el Area?")) {
                     axios({
                         method: "delete",
-                        url: "http://localhost:3333/area/" + id_area,
+                        url: process.env.VUE_APP_RUTA_API + "/area/" + id_area,
                     })
                         .then(response => {
                             this.getAreas();
@@ -88,6 +110,22 @@ export default ({
                 }
             }
         }
+    },
+    computed:{
+        lista(){
+            if(this.control)
+            {
+                return this.lista_areas.filter(item=>
+                {
+                    if(item.Funcionarios>5)
+                    {
+                        return item.Funcionarios;
+                    }
+                })
+            }
+            return this.lista_areas;
+        }
+
     },
     mounted() {
         this.getAreas()

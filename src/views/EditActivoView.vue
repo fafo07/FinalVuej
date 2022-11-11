@@ -68,7 +68,7 @@ export default ({
         getactivo() {
             axios({
                 method: "get",
-                url: "http://localhost:3333/activo/" + this.$route.params.id,
+                url: process.env.VUE_APP_RUTA_API+"/activo/" + this.$route.params.id,
             })
                 .then(response => {
                     this.activo = response.data
@@ -78,7 +78,7 @@ export default ({
         },
         getAreas() {
             axios
-                .get("http://localhost:3333/area")
+                .get(process.env.VUE_APP_RUTA_API+"/area")
 
                 .then(response => {
                     this.lista_areas = response.data
@@ -89,7 +89,7 @@ export default ({
         editactivo() {
             axios({
                 method: "patch",
-                url: "http://localhost:3333/activo/" + this.$route.params.id,
+                url: process.env.VUE_APP_RUTA_API+"/activo/" + this.$route.params.id,
                 data: this.activo
             })
                 .then(response => {

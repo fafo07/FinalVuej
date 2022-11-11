@@ -66,7 +66,7 @@ export default ({
         addarea() {
             axios({
                 method: "post",
-                url: "http://localhost:3333/area",
+                url: process.env.VUE_APP_RUTA_API+"/area",
                 data: this.area
             })
             .then(response =>{

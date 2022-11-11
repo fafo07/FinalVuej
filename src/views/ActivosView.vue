@@ -10,6 +10,18 @@
                         <button @click="irA('Agregar', 0)" class="btn btn-dark">Crear Activo</button>
                     </div>
                 </div>
+                <div class="row my-2 justify-content-center">
+                    <h4>Buscador de Activos</h4>
+                    <div class="col-4 my-2">
+                        <form action="">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" v-model="textoABuscar"
+                                    placeholder="Buscar Activos" />
+                                <button class="btn btn-outline-secondary" @click.prevent="getActivos()">Buscar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="row py-2">
                     <div class="col">
                         <div class="row">
@@ -53,13 +65,14 @@ export default ({
     name: "#ActivosView",
     data() {
         return {
+            textoABuscar: "",
             lista_activos: [],
         }
     },
     methods: {
         getActivos() {
             axios
-                .get("http://localhost:3333/activo")
+                .get(process.env.VUE_APP_RUTA_API+"/activo?q="+this.textoABuscar)
 
                 .then(response => {
                     this.lista_activos = response.data
@@ -72,21 +85,20 @@ export default ({
                 this.$router.push({ name: 'addactivos' });
             }
             if (opcion == 'Editar') {
-                this.$router.push({ name: 'editactivos', params: { id: id_activo} });
+                this.$router.push({ name: 'editactivos', params: { id: id_activo } });
             }
-            if (opcion == 'Eliminar') 
-            {
+            if (opcion == 'Eliminar') {
                 if (confirm("Esta seguro de eliminar el Activo?")) {
                     axios({
                         method: "delete",
-                        url: "http://localhost:3333/activo/" + id_activo,
+                        url: process.env.VUE_APP_RUTA_API+"/activo/" + id_activo,
                     })
                         .then(response => {
                             this.getActivos();
                             console.log(response);
                         })
                         .catch(e => console.log(e))
-                }             
+                }
             }
         }
     },

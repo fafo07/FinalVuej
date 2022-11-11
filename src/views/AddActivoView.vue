@@ -72,7 +72,7 @@ export default ({
         addactivo() {
             axios({
                 method: "post",
-                url: "http://localhost:3333/activo",
+                url: process.env.VUE_APP_RUTA_API+"/activo",
                 data: this.activo
             })
                 .then(response => {
@@ -83,7 +83,7 @@ export default ({
         },
         getAreas() {
             axios
-                .get("http://localhost:3333/area")
+                .get(process.env.VUE_APP_RUTA_API+"/area")
 
                 .then(response => {
                     this.lista_areas = response.data

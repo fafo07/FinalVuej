@@ -63,7 +63,7 @@ export default ({
         getarea() {
             axios({
                 method: "get",
-                url: "http://localhost:3333/area/"+this.$route.params.id,
+                url: process.env.VUE_APP_RUTA_API+"/area/"+this.$route.params.id,
             })
             .then(response =>{
                 this.area=response.data
@@ -74,7 +74,7 @@ export default ({
         editarea() {
             axios({
                 method: "patch",
-                url: "http://localhost:3333/area/"+this.$route.params.id,
+                url: process.env.VUE_APP_RUTA_API+"/area/"+this.$route.params.id,
                 data: this.area
             })
             .then(response =>{
